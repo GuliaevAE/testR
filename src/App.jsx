@@ -1,17 +1,31 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import axios from 'axios'
 
 function App() {
 
-////форма с функциями////////////
+  ////форма с функциями////////////
 
   useEffect(() => {
     axios.get('https://www.random.org/integers/?num=1&min=-50&max=50&col=1&base=10&format=plain&rnd=new')
       .then(res => setCount(res.data))
   }, [])
   const [count, setCount] = useState(0)
+  const countref = useRef(null)
+
+  useEffect(() => {
+    countref.current.animate([{
+      transform: 'rotateY(0deg)'
+    }, {
+      transform: 'rotateY(90deg)'
+    }, {
+      transform: 'rotateY(0deg)'
+    }], { duration: 200, easing: 'ease-out' })
+  }, [count])
+
+
+
   const INC = () => setCount(count + 1)
   const DEC = () => setCount(count - 1)
   const RND = () => setCount(count + Math.floor(Math.random() * 10))
@@ -32,13 +46,13 @@ function App() {
         break;
     }
   }
-//////////////////////////////////////
+  //////////////////////////////////////
 
-function handleSubmit(e) {
-  e.preventDefault();
-}
+  function handleSubmit(e) {
+    e.preventDefault();
+  }
 
-///////форма с валютами///////////////////
+  ///////форма с валютами///////////////////
 
   const [curs, setcurs] = useState([])
   const [valute1, setvalute1] = useState(0)
@@ -59,7 +73,7 @@ function handleSubmit(e) {
 
   }, [curs])
 
-  
+
   function changeInputs(e) {
     if (e.target.id === 'valute1') {
       Object.values(curs).forEach(x => {
@@ -82,7 +96,7 @@ function handleSubmit(e) {
       }
     }
   }
-/////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////
 
 
 
@@ -90,7 +104,7 @@ function handleSubmit(e) {
     <div className="App">
       <form onSubmit={handleSubmit}>
         <div className='form1_count'>
-          <span>{count}</span>
+          <span ref={countref}>{count}</span>
         </div>
 
         <div className='form1_buttons'>
@@ -116,7 +130,7 @@ function handleSubmit(e) {
             <input onInput={changeInputs} type="number" id='count' />
           </div>
           <div className='form2_container_item'>
-            <span>{finalValue}</span>
+            <span >{finalValue}</span>
           </div>
         </div>
       </form>
